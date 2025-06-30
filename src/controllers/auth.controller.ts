@@ -4,8 +4,7 @@ import jwt from "jsonwebtoken";
 import { APIResponse } from "../utils";
 import logger from "../utils/logger";
 import { hashPassword, verifyPassword } from "../utils/password";
-import { userRegisterValidation } from "../validations";
-import { z } from "zod";
+import type { UserRegisterInput, UserLoginInput } from "../validations";
 import User from "../models/User";
 
 const { JWT_SECRET, NODE_ENV } = env;
@@ -13,7 +12,7 @@ const { JWT_SECRET, NODE_ENV } = env;
 const authController = {
   login: async (request: Request, response: Response) => {
     try {
-      const { email, password } = request.body;
+      const { email, password } = request.body as UserLoginInput;
       const user = await User.findOne({ email });
 
       if (!user) {
@@ -65,7 +64,7 @@ const authController = {
   },
   register: async (request: Request, response: Response) => {
     try {
-      const { email, password } = userRegisterValidation.parse(request.body);
+      const { email, password } = request.body as UserRegisterInput;
 
       const existingEmail = await User.findOne({ email });
       if (existingEmail) {
@@ -104,14 +103,6 @@ const authController = {
       logger.error(
         `Erreur lors de l'inscription de l'utilisateur: ${err.message}`
       );
-      if (err instanceof z.ZodError) {
-        return APIResponse(
-          response,
-          err.errors,
-          "Le formulaire est invalide",
-          400
-        );
-      }
       APIResponse(response, null, "Erreur serveur", 500);
     }
   },

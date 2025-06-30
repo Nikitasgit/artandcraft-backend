@@ -1,12 +1,21 @@
 import { Router } from "express";
 import controller from "../controllers/auth.controller";
-import { isAuthenticated } from "../middlewares";
+import { isAuthenticated, validateRequest } from "../middlewares";
+import { userLoginValidation, userRegisterValidation } from "../validations";
 
 const router = Router();
 
-router.post("/login", controller.login);
+router.post(
+  "/login",
+  validateRequest({ body: userLoginValidation }),
+  controller.login
+);
 
-router.post("/register", controller.register);
+router.post(
+  "/register",
+  validateRequest({ body: userRegisterValidation }),
+  controller.register
+);
 
 router.post("/logout", controller.logout);
 
