@@ -81,14 +81,10 @@ async function seedData() {
 
     console.log("Matériaux créés:", materials.length);
 
-    console.log("Données de test ajoutées avec succès !");
-    process.exit(0);
+    console.log("Données ajoutées avec succès !");
   } catch (error) {
-    console.error("Erreur lors de l'ajout des données de test:", error);
-    console.error(
-      "Assurez-vous que MongoDB est en cours d'exécution sur localhost:27017"
-    );
-    console.error("Ou définissez la variable d'environnement MONGO_URI");
+    console.error("Erreur lors de l'ajout des données:", error);
+    console.error("Définissez la variable d'environnement MONGO_URI");
     process.exit(1);
   }
 }
